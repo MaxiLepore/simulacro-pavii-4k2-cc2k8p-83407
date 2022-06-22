@@ -1,0 +1,242 @@
+<div class="container" *ngIf="Mostrar == 'L'">
+  <div class="row">
+    <button
+      class="btn btn-primary fa fa-plus botonesSim"
+      (click)="mostrarAlta()"
+    >
+      Agregar estudiante
+    </button>
+    <table class="table table-striped">
+      <thead>
+        <th>Apellido y nombre</th>
+        <th>Legajo</th>
+        <th>Barrio</th>
+        <th>Fecha de nacimiento</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of Items">
+          <td>{{ item.EstudianteAyN }}</td>
+          <td>{{ item.EstudianteLegajo }}</td>
+          <td>{{ getNombreBarrioById(item.BarrioID) }}</td>
+          <td>{{ item.EstudianteFechaNac | date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Formulario Reactivo Alta -->
+
+<div class="container" *ngIf="Mostrar == 'A'">
+  <form [formGroup]="FormAlta">
+    <!-- Campo nombre y apellido -->
+
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Nombre y apellido <span class="text-danger">*</span>:</label
+        >
+      </div>
+
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="EstudianteAyN"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['EstudianteAyN'].errors &&
+              FormAlta.controls['EstudianteAyN'].touched
+          }"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteAyN'].hasError('required') &&
+            FormAlta.controls['EstudianteAyN'].touched
+          "
+        >
+          <i>Dato requerido</i>
+        </div>
+
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteAyN'].hasError('maxlength') &&
+            FormAlta.controls['EstudianteAyN'].touched
+          "
+        >
+          <i>Campo de máximo 50 caracteres</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo Legajo -->
+
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Legajo <span class="text-danger">*</span>:</label
+        >
+      </div>
+
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="EstudianteLegajo"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['EstudianteLegajo'].errors &&
+              FormAlta.controls['EstudianteLegajo'].touched
+          }"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteLegajo'].hasError('required') &&
+            FormAlta.controls['EstudianteLegajo'].touched
+          "
+        >
+          <i>Dato requerido</i>
+        </div>
+
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteLegajo'].hasError('pattern') &&
+            FormAlta.controls['EstudianteLegajo'].touched
+          "
+        >
+          <i>Ingrese un legajo válido</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo fecha nacimiento -->
+
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Fecha de nacimiento <span class="text-danger">*</span>:</label
+        >
+      </div>
+
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          formControlName="EstudianteFechaNac"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['EstudianteFechaNac'].errors &&
+              FormAlta.controls['EstudianteFechaNac'].touched
+          }"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteFechaNac'].hasError('required') &&
+            FormAlta.controls['EstudianteFechaNac'].touched
+          "
+        >
+          <i>Dato requerido</i>
+        </div>
+
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteFechaNac'].hasError('pattern') &&
+            FormAlta.controls['EstudianteFechaNac'].touched
+          "
+        >
+          <i>Ingrese una fecha de nacimiento válida (Formato dd/mm/yyyy)</i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo Barrio -->
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Barrio <span class="text-danger">*</span>:</label
+        >
+      </div>
+      <div class="col-8">
+        <select
+          class="form-control"
+          formControlName="BarrioID"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['BarrioID'].errors &&
+              FormAlta.controls['BarrioID'].touched
+          }"
+        >
+          <option *ngFor="let item of ItemsBarrios" [ngValue]="item.BarrioID">
+            {{ item.BarrioNombre }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['BarrioID'].hasError('required') &&
+            FormAlta.controls['BarrioID'].touched
+          "
+        >
+          <i> Dato requerido </i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo Regular -->
+    <div class="row">
+      <div class="col-4">
+        <label class="col-form-label">
+          Regular <span class="text-danger">*</span>:</label
+        >
+      </div>
+      <div class="col-8">
+        <select
+          class="form-control"
+          formControlName="EstudianteRegular"
+          [ngClass]="{
+            'is-invalid':
+              FormAlta.controls['EstudianteRegular'].errors &&
+              FormAlta.controls['EstudianteRegular'].touched
+          }"
+        >
+          <option *ngFor="let item of OpcionesRegular" [ngValue]="item.Id">
+            {{ item.Nombre }}
+          </option>
+        </select>
+        <div
+          class="text-danger"
+          *ngIf="
+            FormAlta.controls['EstudianteRegular'].hasError('required') &&
+            FormAlta.controls['EstudianteRegular'].touched
+          "
+        >
+          <i> Dato requerido </i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="row justify-content-center">
+      <button
+        class="btn btn-primary fa fa-trash botonesSim"
+        (click)="mostrarListado()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        class="btn btn-primary fa fa-plus botonesSim"
+        (click)="grabarEstudiante()"
+        [disabled]="FormAlta.invalid"
+      >
+        Agregar estudiante
+      </button>
+    </div>
+  </form>
+</div>
